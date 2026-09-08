@@ -12,12 +12,12 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - name: Android 32-bit
-            os: ubuntu-latest
-            target: Android32
           - name: Android 64-bit
             os: ubuntu-latest
             target: Android64
+          - name: Android 32-bit
+            os: ubuntu-latest
+            target: Android32
 
     name: ${{ matrix.config.name }}
     runs-on: ${{ matrix.config.os }}
