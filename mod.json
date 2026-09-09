@@ -9,6 +9,7 @@
   "version": "v1.0.0",
   "developer": "mchub",
   "description": "Custom Android hack menu for alt account chaos.",
+  "architectures": ["armeabi-v7a", "arm64-v8a"],
   "settings": {
     "noclip": {
       "name": "Noclip",
