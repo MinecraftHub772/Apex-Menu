@@ -1,12 +1,26 @@
 {
   "geode": "4.0.0",
   "gd": {
-    "win": "2.2074",
-    "android": "2.2074"
+    "win": "2.2081",
+    "android": "2.2081"
   },
   "id": "mchub.apex_menu",
   "name": "Apex Menu",
   "version": "v1.0.0",
   "developer": "mchub",
-  "description": "Custom Android hack menu for alt account chaos."
+  "description": "Custom Android hack menu for alt account chaos.",
+  "settings": {
+    "noclip": {
+      "name": "Noclip",
+      "description": "Pass through obstacles",
+      "type": "bool",
+      "default": false
+    },
+    "speedhack": {
+      "name": "Speedhack",
+      "description": "Multiply game speed",
+      "type": "bool",
+      "default": false
+    }
+  }
 }
