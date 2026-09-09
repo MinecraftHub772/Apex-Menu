@@ -3,7 +3,6 @@
 #include <Geode/modify/PlayLayer.hpp>
 #include <Geode/modify/MenuLayer.hpp>
 #include <Geode/ui/Popup.hpp>
-#include <Geode/ui/CCTextInputNode.hpp>
 
 using namespace geode::prelude;
 
@@ -30,60 +29,173 @@ protected:
             ->setGap(8.0f)
             ->setAxisReverse(true);
         
-        m_mainLayer->setLayout(contentLayout);
+        if (contentLayout) {
+            m_mainLayer->setLayout(contentLayout);
+        }
 
-        auto addToggle = [this](const char* labelText, bool currentVal, std::function<void()> callback) {
-            auto toggleSprite = CCSprite::createWithSpriteFrameName("GJ_checkOff_001.png");
-            auto toggleSpriteOn = CCSprite::createWithSpriteFrameName("GJ_checkOn_001.png");
-            
-            auto toggle = CCMenuItemToggler::create(
-                toggleSprite,
-                toggleSpriteOn,
-                this,
-                nullptr
-            );
-            toggle->setScale(0.8f);
-            toggle->setToggled(currentVal);
+        // Noclip Toggle
+        auto noclipToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onNoclip),
+            0.8f
+        );
+        if (noclipToggle) {
+            noclipToggle->toggle(g_noclip);
+            m_mainLayer->addChild(noclipToggle);
+        }
 
-            auto label = CCLabelBMFont::create(labelText, "bigFont.fnt");
-            label->setScale(0.4f);
-            label->setAnchorPoint({0.0f, 0.5f});
+        auto noclipLabel = CCLabelBMFont::create("Noclip", "bigFont.fnt");
+        if (noclipLabel) {
+            noclipLabel->setScale(0.4f);
+            m_mainLayer->addChild(noclipLabel);
+        }
 
-            auto rowContainer = CCLayer::create();
-            rowContainer->setContentSize({240.0f, 30.0f});
-            
-            toggle->setPosition({10.0f, 15.0f});
-            label->setPosition({30.0f, 15.0f});
-            
-            rowContainer->addChild(toggle);
-            rowContainer->addChild(label);
-            
-            m_mainLayer->addChild(rowContainer);
-        };
+        // Speedhack Toggle
+        auto speedToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onSpeedhack),
+            0.8f
+        );
+        if (speedToggle) {
+            speedToggle->toggle(g_speedhack);
+            m_mainLayer->addChild(speedToggle);
+        }
 
-        addToggle("Noclip", g_noclip, [this]() { g_noclip = !g_noclip; });
-        addToggle("Speedhack (2x)", g_speedhack, [this]() { g_speedhack = !g_speedhack; });
-        addToggle("FPS Bypass (120)", g_fpsBypass, [this]() { 
-            g_fpsBypass = !g_fpsBypass;
-            if (g_fpsBypass) {
-                CCDirector::sharedDirector()->setAnimationInterval(1.0f / g_targetFPS);
-            } else {
-                CCDirector::sharedDirector()->setAnimationInterval(1.0f / 60.0f);
-            }
-        });
-        addToggle("Instant Complete", g_instantComplete, [this]() { g_instantComplete = !g_instantComplete; });
-        addToggle("Auto Spammer", g_autoSpammer, [this]() { g_autoSpammer = !g_autoSpammer; });
-        addToggle("Always Jump", g_jumpAlways, [this]() { g_jumpAlways = !g_jumpAlways; });
-        addToggle("Hide UI", g_hideUI, [this]() { g_hideUI = !g_hideUI; });
+        auto speedLabel = CCLabelBMFont::create("Speedhack (2x)", "bigFont.fnt");
+        if (speedLabel) {
+            speedLabel->setScale(0.4f);
+            m_mainLayer->addChild(speedLabel);
+        }
 
-        m_mainLayer->updateLayout();
+        // FPS Bypass Toggle
+        auto fpsToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onFPSBypass),
+            0.8f
+        );
+        if (fpsToggle) {
+            fpsToggle->toggle(g_fpsBypass);
+            m_mainLayer->addChild(fpsToggle);
+        }
+
+        auto fpsLabel = CCLabelBMFont::create("FPS Bypass (120)", "bigFont.fnt");
+        if (fpsLabel) {
+            fpsLabel->setScale(0.4f);
+            m_mainLayer->addChild(fpsLabel);
+        }
+
+        // Instant Complete Toggle
+        auto completeToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onInstantComplete),
+            0.8f
+        );
+        if (completeToggle) {
+            completeToggle->toggle(g_instantComplete);
+            m_mainLayer->addChild(completeToggle);
+        }
+
+        auto completeLabel = CCLabelBMFont::create("Instant Complete", "bigFont.fnt");
+        if (completeLabel) {
+            completeLabel->setScale(0.4f);
+            m_mainLayer->addChild(completeLabel);
+        }
+
+        // Auto Spammer Toggle
+        auto spamToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onAutoSpammer),
+            0.8f
+        );
+        if (spamToggle) {
+            spamToggle->toggle(g_autoSpammer);
+            m_mainLayer->addChild(spamToggle);
+        }
+
+        auto spamLabel = CCLabelBMFont::create("Auto Spammer", "bigFont.fnt");
+        if (spamLabel) {
+            spamLabel->setScale(0.4f);
+            m_mainLayer->addChild(spamLabel);
+        }
+
+        // Jump Always Toggle
+        auto jumpToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onJumpAlways),
+            0.8f
+        );
+        if (jumpToggle) {
+            jumpToggle->toggle(g_jumpAlways);
+            m_mainLayer->addChild(jumpToggle);
+        }
+
+        auto jumpLabel = CCLabelBMFont::create("Always Jump", "bigFont.fnt");
+        if (jumpLabel) {
+            jumpLabel->setScale(0.4f);
+            m_mainLayer->addChild(jumpLabel);
+        }
+
+        // Hide UI Toggle
+        auto hideToggle = CCMenuItemToggler::createWithStandardSprites(
+            this,
+            menu_selector(ApexMenuPopup::onHideUI),
+            0.8f
+        );
+        if (hideToggle) {
+            hideToggle->toggle(g_hideUI);
+            m_mainLayer->addChild(hideToggle);
+        }
+
+        auto hideLabel = CCLabelBMFont::create("Hide UI", "bigFont.fnt");
+        if (hideLabel) {
+            hideLabel->setScale(0.4f);
+            m_mainLayer->addChild(hideLabel);
+        }
+
+        if (m_mainLayer) {
+            m_mainLayer->updateLayout();
+        }
+
         return true;
+    }
+
+    void onNoclip(CCObject*) {
+        g_noclip = !g_noclip;
+    }
+
+    void onSpeedhack(CCObject*) {
+        g_speedhack = !g_speedhack;
+    }
+
+    void onInstantComplete(CCObject*) {
+        g_instantComplete = !g_instantComplete;
+    }
+
+    void onAutoSpammer(CCObject*) {
+        g_autoSpammer = !g_autoSpammer;
+    }
+
+    void onJumpAlways(CCObject*) {
+        g_jumpAlways = !g_jumpAlways;
+    }
+
+    void onHideUI(CCObject*) {
+        g_hideUI = !g_hideUI;
+    }
+
+    void onFPSBypass(CCObject*) {
+        g_fpsBypass = !g_fpsBypass;
+        if (g_fpsBypass) {
+            CCDirector::sharedDirector()->setAnimationInterval(1.0f / g_targetFPS);
+        } else {
+            CCDirector::sharedDirector()->setAnimationInterval(1.0f / 60.0f);
+        }
     }
 
 public:
     static ApexMenuPopup* create() {
         auto ret = new (std::nothrow) ApexMenuPopup();
-        if (ret && ret->initAnchored(260.0f, 240.0f)) {
+        if (ret && ret->initAnchored(280.0f, 300.0f, "GJ_square01.png")) {
             ret->autorelease();
             return ret;
         }
@@ -106,10 +218,12 @@ class $modify(MyPlayerObject, PlayerObject) {
         if (g_speedhack) {
             actualDt *= g_speedMultiplier;
         }
-        if (g_jumpAlways && !this->m_isAccelerating) {
+        
+        PlayerObject::update(actualDt);
+        
+        if (g_jumpAlways) {
             this->pushButton(PlayerButton::Jump);
         }
-        PlayerObject::update(actualDt);
     }
 };
 
@@ -118,7 +232,7 @@ class $modify(MyPlayLayer, PlayLayer) {
     void update(float dt) override {
         PlayLayer::update(dt);
 
-        if (g_instantComplete && !this->m_hasCompletedLevel && this->m_player1) {
+        if (g_instantComplete && this->m_player1 && !this->m_hasCompletedLevel) {
             this->playEndAnimationToPos({0, 0}, false);
         }
 
@@ -127,10 +241,12 @@ class $modify(MyPlayLayer, PlayLayer) {
             this->m_player1->releaseButton(PlayerButton::Jump);
         }
 
-        if (g_hideUI && this->m_uiLayer) {
-            this->m_uiLayer->setVisible(false);
-        } else if (!g_hideUI && this->m_uiLayer) {
-            this->m_uiLayer->setVisible(true);
+        if (this->m_uiLayer) {
+            if (g_hideUI) {
+                this->m_uiLayer->setVisible(false);
+            } else {
+                this->m_uiLayer->setVisible(true);
+            }
         }
     }
 };
@@ -154,7 +270,11 @@ class $modify(MyMenuLayer, MenuLayer) {
         auto btnSprite = CCSprite::createWithSpriteFrameName("GJ_demonIcon_001.png");
         if (!btnSprite) {
             btnSprite = CCSprite::create();
+            if (!btnSprite) {
+                return true;
+            }
         }
+
         btnSprite->setScale(0.7f);
 
         auto btn = CCMenuItemSpriteExtra::create(
@@ -162,16 +282,20 @@ class $modify(MyMenuLayer, MenuLayer) {
             this,
             menu_selector(MyMenuLayer::onOpenApexMenu)
         );
-        
-        btn->setID("apex-menu-btn");
 
-        menu->addChild(btn);
-        menu->updateLayout();
+        if (btn) {
+            btn->setID("apex-menu-btn");
+            menu->addChild(btn);
+            menu->updateLayout();
+        }
 
         return true;
     }
 
     void onOpenApexMenu(CCObject*) {
-        ApexMenuPopup::create()->show();
+        auto popup = ApexMenuPopup::create();
+        if (popup) {
+            popup->show();
+        }
     }
 };
